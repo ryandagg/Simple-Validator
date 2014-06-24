@@ -1,8 +1,35 @@
 // random notes: 123-456-789
+// [1-9a-z!@#$%^&*~`-<>:;|,.?
+// phone[3] != '-' || phone[7] != '-'
 
 var wtf = function() {
 	alert("Nice try! But read the directions.")
 }
+
+// what functions to write?
+// something to replace certain characters, see if those specific characters are in the 
+// correct place and check if the rest is NaN
+var format_test = function(str, remove) {
+	var reg = new RegExp(remove, "g");
+	return isNaN(str.replace(reg, ''));
+}
+
+// just need to compare two arrays!
+var check_special = function(str, special, locations) {
+	var special_list = [];
+	for (var i = 0; i < str.length; i++) {
+		if (str[i] === special) {
+			special_list.push(i);
+		}
+	}
+	for (var j = 0; j < special_list.length; j++) {
+		if (special_list[j] !== locations[j]) {
+			return true;
+		}
+	}
+	return false;
+}
+
 
 // phone validation
 var phone_val = function() {
@@ -11,11 +38,11 @@ var phone_val = function() {
 		wtf();
 		return phone_val();
 	}
-	else if (/[a-z!@#$%^&*~`]/gi.test(phone.replace(/-/g, ''))) {
+	else if (format_test(phone, "-")) {
 		wtf();
 		return phone_val();
 	}
-	else if (phone[3] != '-' || phone[7] != '-') {
+	else if (check_special(phone, "-", [3, 7]))  {
 		wtf();
 		return phone_val();
 	}
@@ -34,11 +61,11 @@ var b_date = function() {
 		wtf();
 		return b_date();
 	}
-	else if (/[a-z!@#$%^&*~`]/gi.test(bday.replace(/\//g, ''))) {
+	else if (format_test(bday, "/")) {
 		wtf();
 		return b_date();
 	}
-	else if (bday[2] != '/' || bday[5] != '/') {
+	else if (check_special(bday, '/', [2, 5])) {
 		wtf();
 		return b_date();
 	}
@@ -60,11 +87,11 @@ var postal_val = function() {
 		wtf();
 		return postal_val();
 	}
-	else if (/[a-z!@#$%^&*~`]/gi.test(postal.replace(/-/g, ''))) {
+	else if (format_test(postal, "-")) {
 		wtf();
 		return postal_val();
 	}
-	else if (postal[5] != '-' && postal.length === 10) {
+	else if (check_special(postal, '-', [5]) && postal.length === 10) {
 		wtf();
 		return postal_val();
 	}
@@ -82,7 +109,7 @@ var st_val = function() {
 		wtf();
 		return st_val();
 	}
-	else if (/[1-9a-z!@#$%^&*~`]/g.test(state)) {
+	else if (/[1-9\W_]/g.test(state)) {
 		wtf();
 		return st_val();
 	}
@@ -93,7 +120,7 @@ var st_val = function() {
 
 st_val();
 
-// Marital status
+// Marital status - no need to refactor
 var married_val = function() {
 	var married = prompt("Are you married? Yes or no?");
 	if(married.toLowerCase() != 'no' && married.toLowerCase() != 'yes') {
